@@ -1,6 +1,6 @@
 # Docker-Website
 
-This dockerized project creates a simple REST server by using the Flask framework.
+This dockerized project creates a simple REST application by using the Flask framework.
 
 Data is stored in the relational database MySQL which is located in a secondary container.
 
