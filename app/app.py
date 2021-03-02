@@ -23,12 +23,12 @@ def hateoas(id):
         },
         {
             "rel": "update",
-            "resource": "http://127.0.0.1:8000/v1/users" + str(id),
+            "resource": "http://127.0.0.1:8000/v1/users/" + str(id),
             "method": "PATCH"
         },
         {
             "rel": "update",
-            "resource": "http://127.0.0.1:8000/v1/users" + str(id),
+            "resource": "http://127.0.0.1:8000/v1/users/" + str(id),
             "method": "DELETE"
         }
     ]
@@ -57,7 +57,7 @@ def post_user_details():
 
 
 @app.route('/v1/users/<user_id>', methods=["GET"])
-def get_user_detais(user_id):
+def get_user_details(user_id):
     try:
         sql = text('SELECT * FROM users WHERE id=:id_num')
         result = db.engine.execute(sql, id_num=user_id).fetchone()
