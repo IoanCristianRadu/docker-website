@@ -6,11 +6,16 @@ from http import HTTPStatus
 from initialise import Initialise
 from flask import Flask
 from flask import render_template
+from validation.validation import UserSchema
+from validation.validation import IDSchema
 
 app = Flask(__name__)
 init = Initialise()
 app = init.db(app)
 db = SQLAlchemy(app)
+
+user_schema = UserSchema()
+id_schema = IDSchema()
 
 
 def hateoas(id):
@@ -43,6 +48,9 @@ def welcome():
 def post_user_details():
     try:
         user_data = request.get_json()
+        errors = user_schema.validate(user_data)
+        if errors:
+            return json.dumps(str(errors)), HTTPStatus.BAD_REQUEST
         insert_user(user_data)
         return response('Added')
     except Exception as e:
@@ -78,7 +86,7 @@ def patch_user_details(user_id):
     try:
         user_data['id'] = user_id
         update_user(user_data)
-        response({
+        return response({
             "id": user_id,
             "links": hateoas(user_id)
         })
