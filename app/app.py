@@ -1,13 +1,16 @@
 import json
-from flask import request
-from sqlalchemy import text
-from flask_sqlalchemy import SQLAlchemy
 from http import HTTPStatus
-from initialise import Initialise
+
 from flask import Flask
 from flask import render_template
-from validation.validation import UserSchema
+from flask import request
+from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import text
+
+from database.initialise import Initialise
+from database.migration import Users
 from validation.validation import IDSchema
+from validation.validation import UserSchema
 
 app = Flask(__name__)
 init = Initialise()
