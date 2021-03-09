@@ -1,8 +1,10 @@
-import os, sys
-import unittest
-import app
 import json
+import os
+import sys
+import unittest
 from http import HTTPStatus
+
+import app
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 basedir = os.path.abspath(os.path.dirname(__file__))
