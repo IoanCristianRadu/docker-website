@@ -1,4 +1,4 @@
-FROM python:3.7.5-slim
+FROM python:3.9-slim
 
 RUN mkdir -p /var/app/flask_app
 WORKDIR /var/app/flask_app
