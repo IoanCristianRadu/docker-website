@@ -12,10 +12,10 @@ from database.migration import Users
 from validation.validation import IDSchema
 from validation.validation import UserSchema
 
-app = Flask(__name__)
+flask_app = Flask(__name__)
 init = Initialise()
-app = init.db(app)
-db = SQLAlchemy(app)
+flask_app = init.db(flask_app)
+db = SQLAlchemy(flask_app)
 
 user_schema = UserSchema()
 id_schema = IDSchema()
@@ -41,13 +41,13 @@ def hateoas(id):
     ]
 
 
-@app.route('/')
+@flask_app.route('/')
 def welcome():
     # Flask way of sending ./templates/index.html.
     return render_template("index.html")
 
 
-@app.route('/v1/users', methods=['POST'])
+@flask_app.route('/v1/users', methods=['POST'])
 def post_user_details():
     try:
         user_data = request.get_json()
@@ -66,7 +66,7 @@ def insert_user(user_data):
     return execute(sql, user_data)
 
 
-@app.route('/v1/users/<user_id>', methods=["GET"])
+@flask_app.route('/v1/users/<user_id>', methods=["GET"])
 def get_user_details(user_id):
     try:
         result = get_user(user_id)
@@ -83,7 +83,7 @@ def get_user(user_id):
     return execute(sql, user_data).fetchone()
 
 
-@app.route('/v1/users/<user_id>', methods=['PATCH'])
+@flask_app.route('/v1/users/<user_id>', methods=['PATCH'])
 def patch_user_details(user_id):
     user_data = request.get_json()
     try:
@@ -107,7 +107,7 @@ def update_user(user_data):
     return execute(sql, user_data)
 
 
-@app.route('/v1/users/<user_id>', methods=['DELETE'])
+@flask_app.route('/v1/users/<user_id>', methods=['DELETE'])
 def delete_user_details(user_id):
     try:
         result = delete_user(user_id)
@@ -134,7 +134,7 @@ def response(message):
 
 # V2 -------------------------------------------------------------------------------------------------------------------
 
-@app.route('/v2/users/<user_id>', methods=['GET'])
+@flask_app.route('/v2/users/<user_id>', methods=['GET'])
 def get_user_details_orm(user_id):
     try:
         result = db.session.query(Users).filter_by(id=user_id).first()
@@ -150,7 +150,7 @@ def get_user_details_orm(user_id):
         return json.dumps('Failed to retrieve record. ' + str(e)), HTTPStatus.NOT_FOUND
 
 
-@app.route('/v2/users', methods=['POST'])
+@flask_app.route('/v2/users', methods=['POST'])
 def post_user_details_orm():
     try:
         data = request.get_json()
@@ -162,7 +162,7 @@ def post_user_details_orm():
         return json.dumps('Failed. ' + str(e)), HTTPStatus.NOT_FOUND
 
 
-@app.route('/v2/users/<user_id>', methods=['PATCH'])
+@flask_app.route('/v2/users/<user_id>', methods=['PATCH'])
 def patch_user_details_orm(user_id):
     try:
         data = request.get_json()
@@ -178,7 +178,7 @@ def patch_user_details_orm(user_id):
         return json.dumps("Failed. " + str(e)), HTTPStatus.NOT_FOUND
 
 
-@app.route('/v2/users/<user_id>', methods=['DELETE'])
+@flask_app.route('/v2/users/<user_id>', methods=['DELETE'])
 def delete_user_details_orm(user_id):
     try:
         user = db.session.query(Users).filter_by(id=user_id).first()

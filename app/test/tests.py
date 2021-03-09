@@ -2,21 +2,21 @@ import json
 import os
 import sys
 import unittest
-from http import HTTPStatus
-
-import app
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 basedir = os.path.abspath(os.path.dirname(__file__))
+
+from app import app
+from http import HTTPStatus
 
 
 class TestAPIMethods(unittest.TestCase):
     def setUp(self):
         self.db_uri = "sqlite:///" + os.path.join(basedir, 'test.db')
-        app.app.config['TESTING'] = True
-        app.app.config['WTF_CSRF_ENABLED'] = False
-        app.app.config['SQLALCHEMY_DATABASE_URI'] = self.db_uri
-        self.app = app.app.test_client()
+        app.flask_app.config['TESTING'] = True
+        app.flask_app.config['WTF_CSRF_ENABLED'] = False
+        app.flask_app.config['SQLALCHEMY_DATABASE_URI'] = self.db_uri
+        self.app = app.flask_app.test_client()
         app.db.create_all()
         cmd = "DROP TABLE IF EXISTS users"
         result = app.db.engine.execute(cmd)
